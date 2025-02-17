@@ -1,4 +1,3 @@
-# Import essential libraries
 import streamlit as st
 import os
 import tempfile
@@ -12,11 +11,11 @@ from langchain.chains import create_retrieval_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain.document_loaders import PyPDFLoader  # Using official loader for PDF
-from langchain.docstore.document import Document  # Use Document object for consistency
+from langchain.document_loaders import PyPDFLoader  # Official PDF loader
+from langchain.docstore.document import Document  # Document object for consistency
 from PIL import Image
 import pytesseract  # OCR for images
-import docx2txt  # For DOCX extraction
+import docx2txt  # DOCX text extraction
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -26,6 +25,9 @@ load_dotenv()
 groq_api_key = os.getenv('GROQ_API_KEY')
 huggingface_api_key = os.getenv('HUGGINGFACEHUB_API_TOKEN')
 
+# Set up Tesseract OCR path for Windows (Adjust if needed)
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+
 # Load LLM model
 llm = ChatGroq(groq_api_key=groq_api_key, model_name='Llama3-8b-8192')
 
@@ -33,7 +35,7 @@ llm = ChatGroq(groq_api_key=groq_api_key, model_name='Llama3-8b-8192')
 prompt = ChatPromptTemplate.from_template(
     """
 Answer the questions based on the provided text only.
-Please provide the most accurate responses based on the question.
+Provide the most accurate responses based on the question.
 If the answer cannot be found from the context, please reply that the information is not found in the provided documents.
 
 <context>
@@ -51,7 +53,6 @@ def clear_session_state():
 
 # Function to process and embed documents with progress updates
 def vector_embeddings(file):
-    # Initialize session state components if not already done
     if "vectors" not in st.session_state:
         st.session_state.embeddings = HuggingFaceEmbeddings(
             model_name="BAAI/bge-small-en-v1.5",
@@ -69,10 +70,10 @@ def vector_embeddings(file):
     logging.info("Starting file processing...")
 
     try:
-        #Identify file extension and read file
+        # Identify file extension and read file
         status_text.text("Reading file...")
         file_extension = file.name.split(".")[-1].lower()
-        time.sleep(0.5)  # Simulate waiting time
+        time.sleep(0.5)
         progress_bar.progress(20)
 
         if file_extension == "pdf":
@@ -82,13 +83,13 @@ def vector_embeddings(file):
                 temp_file_path = temp_file.name
             loader = PyPDFLoader(temp_file_path)
             docs = loader.load()
-            file_preview = "\n".join([doc.page_content[:200] for doc in docs])  # preview first 200 chars per page
+            file_preview = "\n".join([doc.page_content[:200] for doc in docs])  # Preview first 200 chars per page
 
         elif file_extension == "txt":
             status_text.text("Processing TXT file...")
             content = file.read().decode("utf-8")
             docs = [Document(page_content=content)]
-            file_preview = content[:500]  # preview first 500 characters 
+            file_preview = content[:500]  # Preview first 500 characters 
 
         elif file_extension == "docx":
             status_text.text("Processing DOCX file...")
@@ -131,7 +132,7 @@ def vector_embeddings(file):
         st.success("Document processed and embeddings updated successfully.")
         st.session_state.processed_files.append(file.name)
 
-        # Show file preview (if text is available then recheck)
+        # Show file preview
         with st.expander("Preview Uploaded File (first 500 characters)"):
             st.text(file_preview)
 
@@ -141,7 +142,6 @@ def vector_embeddings(file):
         status_text.text("An error occurred during processing.")
         logging.exception("Error during file processing:")
     finally:
-        #  This removes the progress bar after completion
         time.sleep(0.5)
         progress_bar.empty()
 
@@ -149,7 +149,7 @@ def vector_embeddings(file):
 st.set_page_config(page_title="Document QA ChatBot", page_icon=":robot_face:", layout="centered")
 st.title("Document QA ChatBot")
 
-# Document Uploaded shows the  processed files(sidebar)
+# Sidebar for file upload
 st.sidebar.title("Documents Uploader")
 st.sidebar.write("Upload a document (PDF, TXT, DOCX, JPG, PNG) for Q&A.")
 
@@ -187,6 +187,3 @@ try:
 except Exception as e:
     bot.write("Bot: I will only answer questions based on the uploaded document.")
     st.error(f"Error during query processing: {e}")
-
-#HuggingFace Api tokens required 
-#GROQ  Api key required
