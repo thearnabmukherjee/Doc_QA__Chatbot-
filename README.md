@@ -85,7 +85,7 @@ tesseract --version
 
 ### **Run the Application**  
 ```bash
-streamlit run chatbot.py
+streamlit run app.py
 ```
 The chatbot will launch in your default web browser.  
 
