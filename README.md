@@ -130,4 +130,7 @@ This project is licensed under the **MIT License**.
 📧 Contact: **arnabjaymukherjee@gmail.com**  
 
 ---
+## **architecture diagram explaining the flow of the process**  
 
+
+![Untitled diagram-2025-02-17-100600](https://github.com/user-attachments/assets/cf8d1e73-e494-4ba6-a8fb-32e335eca381)
