@@ -31,21 +31,21 @@ Ensure you have the following installed:
 
 ### **2. Clone the Repository**  
 ```bash
-git clone https://github.com/thearnabmukherjee/document-qa-chatbot.git
-cd document-qa-chatbot
+git clone https://github.com/thearnabmukherjee/Doc-qa-chatbot.git](https://github.com/thearnabmukherjee/Doc_QA__Chatbot-.git
+cd <folder-name>
 ```
 
 ### **3. Create and Activate Virtual Environment (Recommended)**  
 
 - **Windows**  
   ```bash
-  python -m venv chatbot_env
-  chatbot_env\Scripts\activate
+  python -m venv <folder-path>
+env\Scripts\activate
   ```
 - **macOS/Linux**  
   ```bash
   python3 -m venv chatbot_env
-  source chatbot_env/bin/activate
+  source env/bin/activate
   ```
 
 ### **4. Install Required Dependencies**  
