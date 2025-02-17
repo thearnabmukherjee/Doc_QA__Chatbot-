@@ -40,11 +40,11 @@ cd <folder-name>
 - **Windows**  
   ```bash
   python -m venv <folder-path>
-env\Scripts\activate
+  env\Scripts\activate
   ```
 - **macOS/Linux**  
   ```bash
-  python3 -m venv chatbot_env
+  python3 -m venv <folder>
   source env/bin/activate
   ```
 
